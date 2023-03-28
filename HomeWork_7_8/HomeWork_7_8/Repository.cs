@@ -12,19 +12,17 @@ namespace HomeWork_7_8
     internal class Repository
     {
         private string filePath = "employees.txt";
-        private char separator = '#';
+        private static int idCounter = 1;
 
         public void AddWorker(Worker worker)
         {
-            int idCounter = 0;
-
             // присваиваем worker уникальный ID,
-            worker.Id = ++idCounter;
+            worker.Id = idCounter++;
 
             // дописываем нового worker в файл
-            using (StreamWriter writer = new StreamWriter(filePath))
+            using (StreamWriter writer = new StreamWriter(filePath, true))
             {
-                string newWorker = $"{worker.Id}#{worker.FullName}#{worker.Age}#{worker.Height}#{worker.Birthday}#{worker.CityOfBirth}";
+                string newWorker = $"{worker.Id}#{worker.infoCreated}#{worker.FullName}#{worker.Age}#{worker.Height}#{worker.Birthday}#{worker.CityOfBirth}";
                 writer.WriteLine(newWorker);
             }
         }
