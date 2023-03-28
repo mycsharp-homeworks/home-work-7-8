@@ -103,17 +103,13 @@ namespace HomeWork_7_8
 
             File.WriteAllText(filePath, emptyContent);
 
-            using (StreamWriter writer = new StreamWriter(filePath))
+            foreach (Worker worker in allWorkers)
             {
-                for (int i = 0; i < allWorkers.Length; i++)
+                if (worker.Id == id)
                 {
-                    if (allWorkers[i].Id == id)
-                    {
-                        continue;
-                    }
-                    string newWorker = $"{allWorkers[i].Id}#{allWorkers[i].FullName}#{allWorkers[i].Age}#{allWorkers[i].Height}#{allWorkers[i].Birthday}#{allWorkers[i].CityOfBirth}";
-                    writer.WriteLine(newWorker);
-                }                
+                    continue;
+                }
+                AddWorker(worker);
             }
         }
     }
