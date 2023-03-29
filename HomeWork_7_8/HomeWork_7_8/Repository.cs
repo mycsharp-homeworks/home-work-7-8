@@ -39,13 +39,14 @@ namespace HomeWork_7_8
                 Worker worker = new Worker
                 {
                     Id = Int32.Parse(fields[0]),
-                    FullName = fields[1],
-                    Age = Int32.Parse(fields[2]),
-                    Height = Int32.Parse(fields[3]),
-                    Birthday = DateTime.Parse(fields[4]),
-                    CityOfBirth = fields[5]
+                    infoCreated = DateTime.Parse(fields[1]),
+                    FullName = fields[2],
+                    Age = Int32.Parse(fields[3]),
+                    Height = Int32.Parse(fields[4]),
+                    Birthday = DateTime.Parse(fields[5]),
+                    CityOfBirth = fields[6]
                 };
-                worker = workers[i];
+                workers[i] = worker;
             }
 
             // и возврат массива считанных экземпляров

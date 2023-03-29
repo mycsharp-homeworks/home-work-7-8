@@ -16,17 +16,19 @@ namespace HomeWork_7_8
         
         static void Main(string[] args)
         {
-            if (!File.Exists(filePath))
-            {
-                File.Create(filePath);
-            }
+            //if (!File.Exists(filePath))
+            //{
+            //    File.Create(filePath);
+            //}
 
-            while (!"3".Equals(choice))
+            while (!"5".Equals(choice))
             {
                 Console.WriteLine("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 Console.WriteLine("Введите 1 — для вывода данных о сотрудниках на экран" +
                 " \nВведите 2 — что бы заполнить данные и добавить новую запись в конец файла" +
-                "\nВведите 3 - что бы выйти из программы");
+                "\nВведите 3 - что бы удалить сотрудника" +
+                "\nВведите 4 - что бы загрузить записи в определенном диапазоне дат" +
+                "\nВведите 5 - что бы выйти из программы");
                 choice = Console.ReadLine();
 
                 Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -127,7 +129,11 @@ namespace HomeWork_7_8
             Console.WriteLine("Нажмите любу клавишу...");
             Console.ReadLine();
         }
-        
+
+        /// <summary>
+        /// Метод принимает ID работника и создает новый массив работников, только без него.
+        /// Далее подчищает файл и уже добавляет строки из обнвленого массива в файл.
+        /// </summary>
         private static void DeleteWorker()
         {
             Console.WriteLine("Введите ID сотрудника для удаления:");
@@ -135,21 +141,46 @@ namespace HomeWork_7_8
             repository.DeleteWorker(id);
         }
 
+        /// <summary>
+        /// Метод принимает две даты и выводит на экран сотрудников,
+        /// чьи дни рождения попадают в данный диапазон дат.
+        /// </summary>
         private static void SelectWorkerBetweenDates()
         {
             Console.WriteLine("Введите первую дату:");
-            DateTime afterDate = DateTime.Parse(Console.ReadLine());
+            string firstDateInput = Console.ReadLine();
+
+            string[] firstDateParts = firstDateInput.Split('.');
+
+            int firstYear = Int32.Parse(firstDateParts[0]);
+            int firstMonth = Int32.Parse(firstDateParts[1]);
+            int firstDay = Int32.Parse(firstDateParts[2]);
 
             Console.WriteLine("Введите вторую дату:");
-            DateTime beforeDate = DateTime.Parse(Console.ReadLine());
-            
-            Worker[] workers = repository.GetWorkersBetweenTwoDates(afterDate, beforeDate);
+            string secondDateInput = Console.ReadLine();
 
-            foreach (Worker worker in workers)
+            Console.WriteLine(">>>>>>>>>>>> Сотрудники в выбранном диапазоне дат <<<<<<<<<<<");
+
+            string[] secondDateParts = secondDateInput.Split('.');
+
+            int secondYear = Int32.Parse(secondDateParts[0]);
+            int secondMonth = Int32.Parse(secondDateParts[1]);
+            int secondDay = Int32.Parse(secondDateParts[2]);
+
+            DateTime dateFrom = new DateTime(firstYear, firstMonth, firstDay);
+            DateTime dateTo = new DateTime(secondYear, secondMonth, secondDay);
+
+            Worker[] workers = repository.GetWorkersBetweenTwoDates(dateFrom, dateTo);
+            string[] workersToPrint = new string[workers.Length];
+            int workerIndex = 0;
+
+            for (int i = 0; i < workers.Length - 1; i++)
             {
-                Console.WriteLine(worker);
+                workersToPrint[i] = $"{workers[i].Id} {workers[i].infoCreated} {workers[i].FullName} {workers[i].Age} {workers[i].Height} {workers[i].Birthday} {workers[i].CityOfBirth}";
+                Console.WriteLine(workersToPrint[i]);
             }
 
+            Console.WriteLine();
             Console.WriteLine("Нажмите любу клавишу...");
             Console.ReadLine();
         }
