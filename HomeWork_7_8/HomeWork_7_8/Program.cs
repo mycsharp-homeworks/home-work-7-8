@@ -241,6 +241,7 @@ namespace HomeWork_7_8
                 Console.WriteLine("Файл не существует! Пожалуйста, заполните хотя бы одну запись.");
                 Console.WriteLine();
                 Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
+                Console.ReadKey();
             }
         }
     }
