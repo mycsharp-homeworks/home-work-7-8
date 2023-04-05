@@ -9,11 +9,13 @@ namespace HomeWork_7_8
 {
     internal class Program
     {
+        private static Repository repository = new Repository();
+
         private static string filePath = "employees.txt";
         private static string choice = "";
+        private static string sortingChoice = "";
         private static char separator = '#';
-        private static Repository repository = new Repository();
-        
+
         static void Main(string[] args)
         {
             //if (!File.Exists(filePath))
@@ -21,14 +23,15 @@ namespace HomeWork_7_8
             //    File.Create(filePath);
             //}
 
-            while (!"5".Equals(choice))
+            while (!"6".Equals(choice))
             {
                 Console.WriteLine("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 Console.WriteLine("Введите 1 — для вывода данных о сотрудниках на экран" +
-                " \nВведите 2 — что бы заполнить данные и добавить новую запись в конец файла" +
+                "\nВведите 2 — что бы заполнить данные и добавить новую запись в конец файла" +
                 "\nВведите 3 - что бы удалить сотрудника" +
                 "\nВведите 4 - что бы загрузить записи в определенном диапазоне дат" +
-                "\nВведите 5 - что бы выйти из программы");
+                "\nВведите 5 - что бы отсортировать сотрудников по определенным полям" +
+                "\nВведите 6 - что бы выйти из программы");
                 choice = Console.ReadLine();
 
                 Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -48,14 +51,24 @@ namespace HomeWork_7_8
                         SelectWorkerBetweenDates();
                         break;
                     case "5":
+                        Console.WriteLine("Как вы хотите отсортировать работников? Введите цифру:" +
+                            "\n1 - По ID" +
+                            "\n2 - Ф.И.О" +
+                            "\n3 - Возраст" +
+                            "\n4 - Рост" +
+                            "\n5 - Дата Рождения" +
+                            "\n6 - Место рождения");
+                        SortWorkers();
+                        break;
+                    case "6":
                         Console.WriteLine("До свидания!");
                         break;
                     default:
-                        Console.WriteLine("Введено не правильное число, нажмите клавишу Enter и попробуйте еще раз!");
+                        Console.WriteLine("Введено не правильное число, нажмите на клавишу Enter и попробуйте еще раз!");
                         Console.ReadKey();
                         break;
                 }
-            }          
+            }
 
         }
 
@@ -67,23 +80,19 @@ namespace HomeWork_7_8
         {
             if (File.Exists(filePath))
             {
-                //using (StreamReader streamReader = new StreamReader(filePath, Encoding.Unicode))
-                //{
-                //    StringBuilder stringBuilder = new StringBuilder(streamReader.ReadToEnd());
-                //    Console.Write(stringBuilder.Replace(separator, ' '));
-                //    Console.WriteLine("Нажмите любую кнопку что бы продолжить...");
-                //}
-
-                string content = File.ReadAllText(filePath);
-
-                content = content.Replace("#", " ");
-
-                Console.WriteLine(content);
+                using (StreamReader streamReader = new StreamReader(filePath))
+                {
+                    StringBuilder stringBuilder = new StringBuilder(streamReader.ReadToEnd());
+                    Console.Write(stringBuilder.Replace(separator, ' '));
+                    Console.WriteLine();
+                    Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
+                }
             }
             else
             {
                 Console.WriteLine("Файл не существует! Пожалуйста, заполните хотя бы одну запись.");
-                Console.WriteLine("Нажмите любую кнопку что бы продолжить...");
+                Console.WriteLine();
+                Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
             }
         }
 
@@ -109,7 +118,7 @@ namespace HomeWork_7_8
 
             int year = Int32.Parse(dateParts[0]);
             int month = Int32.Parse(dateParts[1]);
-            int day = Int32.Parse(dateParts[2]);    
+            int day = Int32.Parse(dateParts[2]);
 
             Console.WriteLine("Введите город проживания сотрудника:");
             string city = Console.ReadLine();
@@ -126,7 +135,8 @@ namespace HomeWork_7_8
 
             repository.AddWorker(worker);
 
-            Console.WriteLine("Нажмите любу клавишу...");
+            Console.WriteLine();
+            Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
             Console.ReadLine();
         }
 
@@ -181,8 +191,49 @@ namespace HomeWork_7_8
             }
 
             Console.WriteLine();
-            Console.WriteLine("Нажмите любу клавишу...");
+            Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
             Console.ReadLine();
         }
-    }    
+
+        public static void SortWorkers()
+        {
+            Worker[] workersToSort = repository.GetAllWorkers();
+            Worker[] afterSorting = new Worker[workersToSort.Length];
+            sortingChoice = Console.ReadLine();
+
+            switch (sortingChoice)
+            {
+                case "1":
+                    afterSorting = workersToSort.OrderBy(worker => worker.Id).ToArray();                    
+                    break;
+                case "2":
+                    afterSorting = workersToSort.OrderBy(worker => worker.FullName).ToArray();                    
+                    break;
+                case "3":
+                    afterSorting = workersToSort.OrderBy(worker => worker.Age).ToArray();                   
+                    break;
+                case "4":                    
+                    afterSorting = workersToSort.OrderBy(worker => worker.Height).ToArray();
+                    break;
+                case "5":
+                    afterSorting = workersToSort.OrderBy(worker => worker.Birthday).ToArray();
+                    break;
+                case "6":
+                    afterSorting = workersToSort.OrderBy(worker => worker.CityOfBirth).ToArray();
+                    break;
+            }
+            
+            Console.WriteLine("Результат сортировки:");
+            
+            foreach (Worker worker in afterSorting)
+            {
+                string sortedWorker = $"{worker.Id} {worker.infoCreated} {worker.FullName} {worker.Age} {worker.Height} {worker.Birthday} {worker.CityOfBirth}";
+                Console.WriteLine(sortedWorker);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
+            Console.ReadKey();
+        }
+    }
 }

@@ -24,7 +24,7 @@ namespace HomeWork_7_8
             {
                 string newWorker = $"{worker.Id}#{worker.infoCreated}#{worker.FullName}#{worker.Age}#{worker.Height}#{worker.Birthday}#{worker.CityOfBirth}";
                 writer.WriteLine(newWorker);
-            }
+            }            
         }
 
         public Worker[] GetAllWorkers() 
@@ -110,6 +110,6 @@ namespace HomeWork_7_8
                 }
                 AddWorker(worker);
             }
-        }
+        }      
     }
 }
