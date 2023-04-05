@@ -17,12 +17,7 @@ namespace HomeWork_7_8
         private static char separator = '#';
 
         static void Main(string[] args)
-        {
-            //if (!File.Exists(filePath))
-            //{
-            //    File.Create(filePath);
-            //}
-
+        {  
             while (!"6".Equals(choice))
             {
                 Console.WriteLine("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
@@ -73,7 +68,7 @@ namespace HomeWork_7_8
         }
 
         /// <summary>
-        /// Метод проверяет существует ли текстовый файл, если да, то выводит его на экран,
+        /// Метод проверяет существует ли текстовый файл, если да, то считывает и выводит его на экран,
         /// иначе выдает соответсвующее сообщение и возвращает в главное меню.
         /// </summary>
         private static void ReadEmployeeInfoFile()
@@ -195,45 +190,58 @@ namespace HomeWork_7_8
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// Метод считывает сотрудников со списка, сортирует и добавляет в новый массив
+        /// печатает в коносле отсортированный список сотрудников.
+        /// </summary>
         public static void SortWorkers()
         {
-            Worker[] workersToSort = repository.GetAllWorkers();
-            Worker[] afterSorting = new Worker[workersToSort.Length];
-            sortingChoice = Console.ReadLine();
-
-            switch (sortingChoice)
+            if (File.Exists(filePath))
             {
-                case "1":
-                    afterSorting = workersToSort.OrderBy(worker => worker.Id).ToArray();                    
-                    break;
-                case "2":
-                    afterSorting = workersToSort.OrderBy(worker => worker.FullName).ToArray();                    
-                    break;
-                case "3":
-                    afterSorting = workersToSort.OrderBy(worker => worker.Age).ToArray();                   
-                    break;
-                case "4":                    
-                    afterSorting = workersToSort.OrderBy(worker => worker.Height).ToArray();
-                    break;
-                case "5":
-                    afterSorting = workersToSort.OrderBy(worker => worker.Birthday).ToArray();
-                    break;
-                case "6":
-                    afterSorting = workersToSort.OrderBy(worker => worker.CityOfBirth).ToArray();
-                    break;
-            }
-            
-            Console.WriteLine("Результат сортировки:");
-            
-            foreach (Worker worker in afterSorting)
-            {
-                string sortedWorker = $"{worker.Id} {worker.infoCreated} {worker.FullName} {worker.Age} {worker.Height} {worker.Birthday} {worker.CityOfBirth}";
-                Console.WriteLine(sortedWorker);
-            }
+                Worker[] workersToSort = repository.GetAllWorkers();
+                Worker[] afterSorting = new Worker[workersToSort.Length];
+                sortingChoice = Console.ReadLine();
 
-            Console.WriteLine();
-            Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
-            Console.ReadKey();
+                switch (sortingChoice)
+                {
+                    case "1":
+                        afterSorting = workersToSort.OrderBy(worker => worker.Id).ToArray();
+                        break;
+                    case "2":
+                        afterSorting = workersToSort.OrderBy(worker => worker.FullName).ToArray();
+                        break;
+                    case "3":
+                        afterSorting = workersToSort.OrderBy(worker => worker.Age).ToArray();
+                        break;
+                    case "4":
+                        afterSorting = workersToSort.OrderBy(worker => worker.Height).ToArray();
+                        break;
+                    case "5":
+                        afterSorting = workersToSort.OrderBy(worker => worker.Birthday).ToArray();
+                        break;
+                    case "6":
+                        afterSorting = workersToSort.OrderBy(worker => worker.CityOfBirth).ToArray();
+                        break;
+                }
+
+                Console.WriteLine("Результат сортировки:");
+
+                foreach (Worker worker in afterSorting)
+                {
+                    string sortedWorker = $"{worker.Id} {worker.infoCreated} {worker.FullName} {worker.Age} {worker.Height} {worker.Birthday} {worker.CityOfBirth}";
+                    Console.WriteLine(sortedWorker);
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("Файл не существует! Пожалуйста, заполните хотя бы одну запись.");
+                Console.WriteLine();
+                Console.WriteLine("Нажмите на любую клавишу что бы продолжить...");
+            }
         }
     }
 }
